@@ -8,10 +8,14 @@ const app = polka()
 const API = "https://api-sekolah-indonesia.vercel.app/sekolah"
 
 // endpoint pertama
-app.get("/",(req,res)=>{
+app.get("/",async(req,res)=>{
+    const response = await axios.get(API)
+    const data = response.data
+    const sekolah = data.dataSekolah
+
     res.setHeader("Access-Control-Allow-Origin","*")
     res.setHeader("Content-type","application/json")
-    res.end(JSON.stringify({nama:"Nugie kurniawan"}))
+    res.end(JSON.stringify(sekolah))
 });
 
 // berdasarkan perPage
