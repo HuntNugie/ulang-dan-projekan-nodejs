@@ -9,7 +9,7 @@ const API = "https://api-sekolah-indonesia.vercel.app/sekolah"
 
 // endpoint pertama
 app.get("/",async(req,res)=>{
-    const response = await axios.get(API)
+    const response = await axios.get(API+"?page=1&perPage=6")
     const data = response.data
     const sekolah = data.dataSekolah
 

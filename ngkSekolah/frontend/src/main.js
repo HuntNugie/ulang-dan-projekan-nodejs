@@ -1,14 +1,16 @@
 import './style.css';
 
 const API = 'http://localhost:3000/';
+const main = document.querySelector ('#ulin');
 
-// saat baru pertama kali di buka
-window.onload = () => {
-  if (history.state == null) {
-    fetch (API).then (res => res.json ()).then (res => {
-      const main = document.querySelector ('#ulin');
+// untuk mengubah data menjadi json
+const getData = function(link){
+  return fetch(link).then(res=>res.json())
+}
 
-      const data = res.map (el => {
+// untuk merender ui nya
+const renderUI = function(response){
+  const data = response.map (el => {
         const alamat = `${el.alamat_jalan}, ${el.kecamatan}, ${el.kabupaten_kota}, ${el.propinsi}, ${el.kode_prop}`;
         return `
       <div class="bg-gray-800 rounded-xl shadow-lg p-6 hover:scale-105 transition-transform border-2 border-indigo-500">
@@ -21,6 +23,19 @@ window.onload = () => {
       `
       }).join("");
       main.innerHTML = data
-    });
+}
+
+// untuk data defaults baru di buka
+const defaults = async function(link=API){
+  const response = await getData(link)
+  return response
+}
+
+
+// saat baru pertama kali di buka
+window.onload = async () => {
+  if (history.state == null) {
+    const data = await defaults()
+    renderUI(data)
   }
 };
