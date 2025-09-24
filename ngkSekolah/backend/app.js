@@ -21,13 +21,12 @@ app.get("/",async(req,res)=>{
 // berdasarkan perPage
 app.get("/API/sekolah/perPage",async(req,res)=>{
     try{
-        const prs = parseUrl(req.url,true)
-        const resultUrl = prs.query
+        const {query} = parseUrl(req.url,true)
         let api = ""
-        if(Object.keys(resultUrl).length === 0){
+        if(Object.keys(query).length === 0){
             api = API
         }else{
-            api = `${API}?perPage=${resultUrl.per}`
+            api = `${API}?perPage=${query.per}`
         }
         const response = await axios.get(api)
         const data = response.data
