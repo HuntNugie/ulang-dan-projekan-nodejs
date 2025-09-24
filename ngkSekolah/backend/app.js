@@ -42,9 +42,15 @@ app.get("/API/sekolah/perPage",async(req,res)=>{
     }
 });
 
-app.get("/API/sekolah/:nama",(req,res)=>{
-    const {nama} = req.params
-    res.end(nama)
+// untuk search by nama
+app.get("/API/sekolah",async (req,res)=>{
+    const url = new URL(req.url,`http://${req.headers.host}`)
+    const srch = url.searchParams.get("search") || ""
+    const urlBersih = decodeURIComponent(srch)
+    const response = await axios.get(`${API}/s?sekolah=${urlBersih}`)
+    res.setHeader("Access-Control-Allow-Origin","*")
+    res.setHeader("Content-type","application/json")
+    res.end(JSON.stringify(response.data))
 })
 
 
