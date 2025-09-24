@@ -112,7 +112,12 @@ document.querySelector("#filter").addEventListener("change",async(event)=>{
 const debounceSearch = debounce(async(event)=>{
   try{
   const result = await searchByname(API,event.target.value)
-  renderUI(result)
+  if(result.message){
+    main.innerHTML = `<h1 class="text-center">${result.message} Tidak ada sekolah</h1>`
+  }else{
+    renderUI(result)
+  history.pushState({page:"search",data:result},"",`?search=${event.target.value}`)
+  }
   }catch(error){
     console.error(error)
   }
