@@ -33,8 +33,8 @@ app.get("/API/sekolah/perPage",async(req,res)=>{
         const data = response.data
         const result = data.dataSekolah
         // fs.writeFileSync("perPage.json",JSON.stringify(data))
-        res.setHeader("Access-Control-Allow-Origin","*")
-        res.setHeader("Control-type","application/json")
+    res.setHeader("Access-Control-Allow-Origin","*")
+    res.setHeader("Content-type","application/json")
         res.end(JSON.stringify(result))
     }catch(err){
         res.setHeader("Access-Control-Allow-Origin","*")

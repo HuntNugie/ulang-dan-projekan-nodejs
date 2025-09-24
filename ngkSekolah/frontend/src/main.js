@@ -26,16 +26,34 @@ const renderUI = function(response){
 }
 
 // untuk data defaults baru di buka
-const defaults = async function(link=API){
+const defaults = async (link=API)=>{
   const response = await getData(link)
   return response
 }
 
+// untuk perPage
+const perPage = async (link=API,page)=>{
+  const data = await getData(`${link}API/sekolah/perPage/?per=${page}`)
+  return data
+}
 
 // saat baru pertama kali di buka
 window.onload = async () => {
   if (history.state == null) {
     const data = await defaults()
     renderUI(data)
+  }else{
+    if(history.state?.page == "perPage"){
+      const data = await perPage()
+      renderUI(data)
+    }
   }
 };
+
+// jalankan perPage
+document.querySelector("#filter").addEventListener("change",async(event)=>{
+    const val = event.target.value
+    const data = await perPage(API,val)
+    renderUI(data)
+  })
+
