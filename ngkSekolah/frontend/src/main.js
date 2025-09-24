@@ -1,4 +1,5 @@
 import './style.css';
+import debounce from "debounce"
 
 const API = 'http://localhost:3000/';
 const main = document.querySelector ('#ulin');
@@ -37,6 +38,11 @@ const perPage = async (link=API,page)=>{
   return data
 }
 
+// untuk search
+const searchByname = async (link=API,name)=>{
+  const data = await getData(`${link}API/sekolah?search=${name}`)
+  return data
+}
 
 // saat baru pertama kali di buka
 window.onload = async () => {
@@ -45,13 +51,9 @@ window.onload = async () => {
     renderUI(data)
   }else{
     const data = renderUI(history.state?.data)
-    if(history.state?.page == "perPage"){
-      if(!history.state?.data){
-        const data = await perPage(page=history.state.per)
-        renderUI(data)
-      }
-    }else{
-      
+    if(history.state?.page == "perPage" && !history.state?.data){
+      const data = await perPage(page=history.state.per)
+      renderUI(data)
     }
   }
 };
@@ -80,7 +82,8 @@ document.querySelector("#filter").addEventListener("change",async(event)=>{
     }
   })
 
-function loading(){
+// function untuk loading
+  function loading(){
   return `<div class="bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-indigo-500 animate-pulse">
         <div class="h-6 bg-gray-700 rounded mb-2 w-3/4"></div>
         <div class="h-4 bg-gray-700 rounded mb-1 w-1/2"></div>
@@ -104,3 +107,16 @@ function loading(){
         <div class="h-4 bg-gray-700 rounded w-1/4"></div>
       </div>`
 }
+
+
+const debounceSearch = debounce(async(event)=>{
+  try{
+  const result = await searchByname(API,event.target.value)
+  renderUI(result)
+  }catch(error){
+    console.error(error)
+  }
+},500)
+
+// untuk jika ada search
+const searching = document.querySelector("#searchs").addEventListener("input",debounceSearch)
