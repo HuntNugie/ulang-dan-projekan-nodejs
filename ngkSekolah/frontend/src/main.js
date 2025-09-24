@@ -37,23 +37,70 @@ const perPage = async (link=API,page)=>{
   return data
 }
 
+
 // saat baru pertama kali di buka
 window.onload = async () => {
   if (history.state == null) {
     const data = await defaults()
     renderUI(data)
   }else{
+    const data = renderUI(history.state?.data)
     if(history.state?.page == "perPage"){
-      const data = await perPage()
-      renderUI(data)
+      if(!history.state?.data){
+        const data = await perPage(page=history.state.per)
+        renderUI(data)
+      }
+    }else{
+      
     }
   }
 };
 
 // jalankan perPage
 document.querySelector("#filter").addEventListener("change",async(event)=>{
-    const val = event.target.value
-    const data = await perPage(API,val)
-    renderUI(data)
+    if(event.state?.per != event.target.value){
+      const val = event.target.value
+      const data = await perPage(API,val)
+      history.pushState({page:"perPage",per:val,data:data},"",`?perPage=${val}`)
+      renderUI(data)
+    }else{
+      const data = renderUI(event.state?.data)
+    }
   })
 
+
+  // jika menggunakan popstate
+  window.addEventListener("popstate",async (event)=>{
+    if(event.state?.data){
+       const data = renderUI(event.state?.data)
+    }else{
+      main.innerHTML = loading()
+      const data = await defaults()
+      renderUI(data)
+    }
+  })
+
+function loading(){
+  return `<div class="bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-indigo-500 animate-pulse">
+        <div class="h-6 bg-gray-700 rounded mb-2 w-3/4"></div>
+        <div class="h-4 bg-gray-700 rounded mb-1 w-1/2"></div>
+        <div class="h-4 bg-gray-700 rounded mb-1 w-1/3"></div>
+        <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+      </div>
+
+      <!-- Placeholder Card 2 -->
+      <div class="bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-indigo-500 animate-pulse">
+        <div class="h-6 bg-gray-700 rounded mb-2 w-3/4"></div>
+        <div class="h-4 bg-gray-700 rounded mb-1 w-1/2"></div>
+        <div class="h-4 bg-gray-700 rounded mb-1 w-1/3"></div>
+        <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+      </div>
+
+      <!-- Placeholder Card 3 -->
+      <div class="bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-indigo-500 animate-pulse">
+        <div class="h-6 bg-gray-700 rounded mb-2 w-3/4"></div>
+        <div class="h-4 bg-gray-700 rounded mb-1 w-1/2"></div>
+        <div class="h-4 bg-gray-700 rounded mb-1 w-1/3"></div>
+        <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+      </div>`
+}
