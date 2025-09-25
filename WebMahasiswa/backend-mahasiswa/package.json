@@ -1,0 +1,17 @@
+{
+  "name": "backend-mahasiswa",
+  "version": "1.0.0",
+  "description": "Backend untuk web mahasiswa yang akan di masukan ke dalam json",
+  "license": "ISC",
+  "author": "Nugie kurniawan (HuntNugie)",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "polka": "^0.5.2",
+    "url-parse": "^1.5.10"
+  }
+}
